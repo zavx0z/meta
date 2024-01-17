@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+    <meta name="description" content="2d/3d vanilla three.js framework" />
+    <title>meta</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@latest/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@latest/examples/jsm/",
+          "troika-three-text": "http://unpkg.com/troika-three-text@latest/dist/troika-three-text.esm.js",
+          "troika-three-utils": "http://unpkg.com/troika-three-utils@latest/dist/troika-three-utils.esm.js",
+          "troika-worker-utils": "http://unpkg.com/troika-worker-utils@latest/dist/troika-worker-utils.esm.js",
+          "webgl-sdf-generator": "https://unpkg.com/webgl-sdf-generator@latest/dist/webgl-sdf-generator.mjs",
+          "bidi-js": "https://unpkg.com/bidi-js@latest/dist/bidi.mjs"
+        }
+      }
+    </script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100dvw;
+        height: 100dvh;
+        background-color: #1b2634;
+      }
+      canvas {
+        touch-action: none;
+      }
+    </style>
+    <script type="module" src="elements/meta-for.js"></script>
+    <script type="module" src="elements/meta-scene.js"></script>
+    <script type="module" src="elements/meta-orbit-controls.js"></script>
+    <script type="module" src="elements/meta-gltf-asset.js"></script>
+    <script type="module" src="elements/meta-text.js"></script>
+    <script type="module">
+      import { defineThreeElements } from "./util/defineThreeElements.js"
+      defineThreeElements()
+      const scene = document.body.querySelector("meta-scene")
+      const cube = document.querySelector("#torus").object
+      let deg = 0.004
+      function animate() {
+        requestAnimationFrame(animate)
+        cube.rotation.x += deg
+        cube.rotation.y += deg
+        scene.meta.renderer.render(scene.object, scene.camera)
+      }
+      animate()
+      // console.log(scene.object)
+    </script>
+  </head>
+
+  <body>
+    <meta-for autorender>
+      <meta-scene>
+        <meta-orbit-controls></meta-orbit-controls>
+        <!-- <meta-ambient-light intensity=".04"></meta-ambient-light> -->
+        <meta-directional-light intensity="1" position="40, 40, 50" cast-shadow></meta-directional-light>
+        <meta-text
+          position.y="0"
+          text="META"
+          anchor-x="50%"
+          anchor-y="50%"
+          font="assets/RussoOne-Regular.ttf"
+          material.color="#87ceeb"
+          font-size="1.2">
+        </meta-text>
+        <!-- <meta-gltf-asset url="assets/bots.glb" scale="0.5"></meta-gltf-asset> -->
+        <meta-mesh id="torus" position="0,0,0" receive-shadow>
+          <meta-torus-geometry args="4, 2, 14, 44"></meta-torus-geometry>
+          <meta-mesh-standard-material wireframe color="#87ceeb"></meta-mesh-standard-material>
+        </meta-mesh>
+      </meta-scene>
+    </meta-for>
+  </body>
+</html>
