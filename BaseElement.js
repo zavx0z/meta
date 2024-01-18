@@ -78,7 +78,7 @@ export class BaseElement extends HTMLElement {
   }
   constructor() {
     super()
-    /* Bind some convenience functions to make it easier to destructure elements in tick event handlers. */
+    /* Свяжите некоторые удобные функции, чтобы упростить деструктурные элементы в обработчиках событий.*/
     this.requestFrame = this.requestFrame.bind(this)
   }
   /**
@@ -178,7 +178,7 @@ export class BaseElement extends HTMLElement {
   attributeChangedCallback(key, _, value) {
     return applyPropWithDirective(this, camelize(key), value)
   }
-  requestFrame() {
+  requestFrame = () => {
     this.meta.requestFrame()
   }
   /**

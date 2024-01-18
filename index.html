@@ -39,6 +39,11 @@
         height: 100dvh;
         background-color: #1b2634;
       }
+      #html {
+        width: 444px;
+        height: 444px;
+        background-color: #fff;
+      }
     </style>
     <script type="module" src="elements/meta-for.js"></script>
     <script type="module" src="elements/meta-scene.js"></script>
@@ -53,23 +58,26 @@
       const torus3D = torus.object
 
       torus.addEventListener("pointerover", (event) => console.log("pointerover", event))
-      torus.addEventListener("click", (event) => console.log("click", event))
+      torus.addEventListener("click", (event) => {
+        scene.meta.requestFrame()
+        console.log("click", event)
+      })
       torus.addEventListener("touchstart", (event) => console.log("touchstart", event))
 
-      let deg = 0.004
-      function animate() {
-        requestAnimationFrame(animate)
-        torus3D.rotation.x += deg
-        torus3D.rotation.y += deg
-        scene.meta.renderer.render(scene.object, scene.camera)
-      }
-      animate()
+      // let deg = 0.004
+      // function animate() {
+      //   requestAnimationFrame(animate)
+      //   torus3D.rotation.x += deg
+      //   torus3D.rotation.y += deg
+      //   // scene.meta.renderer.render(scene.object, scene.camera)
+      // }
+      // animate()
       // console.log(scene.object)
     </script>
   </head>
 
   <body>
-    <meta-for autorender>
+    <meta-for>
       <meta-scene>
         <meta-orbit-controls></meta-orbit-controls>
         <!-- <meta-ambient-light intensity=".04"></meta-ambient-light> -->
@@ -84,6 +92,7 @@
           font-size="1.2">
         </meta-text>
         <!-- <meta-gltf-asset url="assets/bots.glb" scale="0.5"></meta-gltf-asset> -->
+        <div id="html"></div>
         <meta-mesh
           id="torus"
           position="0,0,0"
