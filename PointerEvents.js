@@ -1,6 +1,5 @@
 import { Object3D, Raycaster, Vector2 } from "three"
-import { MetaScene } from "./elements/meta-scene.js"
-import { ThreeElement } from "./ThreeElement.js"
+import { MetaElement } from "./MetaElement.js"
 import { normalizePointerPosition } from "./util/normalizePointerPosition.js"
 /**
  * Clones the provided event by instantiating a new event using the original event's
@@ -79,7 +78,15 @@ export class PointerEvents {
     /* Now just forward a bunch of DOM events to the current intersect. */
     for (const type of ["pointerdown", "pointerup", "click", "dblclick"]) {
       renderer.domElement.addEventListener(type, (e) => {
-        if (this.intersection) this.dispatchEventToIntersection(cloneEvent(e), this.intersection)
+        const { camera } = this.sceneElement
+        this.raycaster.setFromCamera(this.position, camera)
+        const intersections = this.raycaster.intersectObjects(scene.children, true)
+        if (intersections) {
+          console.log(intersections.map(i => i.object.name))
+          const intersection = intersections[0]
+          if (intersection && intersection.object !== undefined)
+            this.dispatchEventToIntersection(cloneEvent(e), intersections[0])
+        }
       })
     }
   }
@@ -89,7 +96,7 @@ export class PointerEvents {
    *
    * Traverses up the intersection's object hierarchy to find
    * the first object with a 'threeElement' userData property.
-   * Then dispatches the given event to that ThreeElement's
+   * Then dispatches the given event to that MetaElement's
    * underlying DOM element via the eventForwarder helper.
    *
    * @param {Event} event
@@ -101,7 +108,7 @@ export class PointerEvents {
     let object
     for (object = intersection.object; object; object = object.parent) {
       if (object.userData.threeElement) {
-        /** @type {ThreeElement} Find the element representing the hovered scene object */
+        /** @type {MetaElement} Find the element representing the hovered scene object */
         const element = object.userData.threeElement
         eventForwarder(element)(event)
         return

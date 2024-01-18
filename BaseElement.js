@@ -178,7 +178,7 @@ export class BaseElement extends HTMLElement {
   attributeChangedCallback(key, _, value) {
     return applyPropWithDirective(this, camelize(key), value)
   }
-  requestFrame = () => {
+  requestFrame() {
     this.meta.requestFrame()
   }
   /**
@@ -215,7 +215,7 @@ export class BaseElement extends HTMLElement {
     return `<${this.tagName.toLowerCase()}>`
   }
   debug(...output) {
-    console.debug(`${this.htmlTagName}`, ...output)
+    // console.debug(`${this.htmlTagName}`, ...output)
   }
   error(...output) {
     console.error(`${this.htmlTagName}>`, ...output)

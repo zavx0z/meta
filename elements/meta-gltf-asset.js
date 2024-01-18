@@ -1,11 +1,11 @@
 import { Group } from "three"
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js"
-import { ThreeElement } from "../ThreeElement.js"
+import { MetaElement } from "../MetaElement.js"
 import { registerThreeElement } from "../util/registerElement.js"
 const loader = new GLTFLoader()
 
-export class ThreeGLTFAsset extends ThreeElement.for(Group) {
-  static exposedProperties = [...ThreeElement.exposedProperties, "url"]
+export class ThreeGLTFAsset extends MetaElement.for(Group) {
+  static exposedProperties = [...MetaElement.exposedProperties, "url"]
   /**
    * Has the GLTF been loaded?
    */

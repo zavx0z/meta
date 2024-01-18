@@ -1,10 +1,10 @@
 import { Camera, Color, OrthographicCamera, PerspectiveCamera, Scene, WebGLRenderer } from "three"
 import { PointerEvents } from "../PointerEvents.js"
-import { ThreeElement } from "../ThreeElement.js"
+import { MetaElement } from "../MetaElement.js"
 import { registerThreeElement } from "../util/registerElement.js"
 
-export class MetaScene extends ThreeElement.for(Scene) {
-  static exposedProperties = [...ThreeElement.exposedProperties, "backgroundColor", "camera"]
+export class MetaScene extends MetaElement.for(Scene) {
+  static exposedProperties = [...MetaElement.exposedProperties, "backgroundColor", "camera"]
   /** @param {string} v - background color value */
   set backgroundColor(v) {
     this.object.background = new Color(v)

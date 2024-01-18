@@ -1,9 +1,9 @@
 import { Texture, TextureLoader } from "three"
-import { ThreeElement } from "../ThreeElement.js"
+import { MetaElement } from "../MetaElement.js"
 import { registerThreeElement } from "../util/registerElement.js"
 
-export class ThreeTexture extends ThreeElement.for(Texture) {
-  static exposedProperties = [...ThreeElement.exposedProperties, "url"]
+export class ThreeTexture extends MetaElement.for(Texture) {
+  static exposedProperties = [...MetaElement.exposedProperties, "url"]
   /** @type {string} */
   _url
   get url() {

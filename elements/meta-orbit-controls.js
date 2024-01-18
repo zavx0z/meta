@@ -1,8 +1,8 @@
 import { OrbitControls } from "three/addons/controls/OrbitControls.js"
-import { ThreeElement } from "../ThreeElement.js"
+import { MetaElement } from "../MetaElement.js"
 import { registerThreeElement } from "../util/registerElement.js"
 
-export class ThreeOrbitControls extends ThreeElement {
+export class ThreeOrbitControls extends MetaElement {
   createControls() {
     const previousTarget = this.object?.target
     this.object?.dispose()

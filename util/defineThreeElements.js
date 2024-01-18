@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { ThreeElement } from "../ThreeElement.js"
+import { MetaElement } from "../MetaElement.js"
 import { dasherize } from "./dasherize.js"
 import { registerThreeElement } from "./registerElement.js"
 /**
@@ -10,6 +10,6 @@ export const defineThreeElements = () => {
     const threeClass = THREE[threeProp]
     const tagName = `meta-${dasherize(threeProp)}`
     if (typeof threeClass === "function" && "prototype" in threeClass)
-      registerThreeElement(tagName, threeProp, ThreeElement.for(threeClass))
+      registerThreeElement(tagName, threeProp, MetaElement.for(threeClass))
   }
 }

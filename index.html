@@ -50,6 +50,7 @@
     <script type="module" src="elements/meta-orbit-controls.js"></script>
     <script type="module" src="elements/meta-gltf-asset.js"></script>
     <script type="module" src="elements/meta-text.js"></script>
+    <script type="module" src="elements/meta-stats.js"></script>
     <script type="module">
       import { defineThreeElements } from "./util/defineThreeElements.js"
       defineThreeElements()
@@ -57,11 +58,26 @@
       const torus = document.querySelector("#torus")
       const torus3D = torus.object
 
+      const text = document.querySelector("meta-text")
       torus.addEventListener("pointerover", (event) => console.log("pointerover", event))
-      torus.addEventListener("click", (event) => {
-        scene.meta.requestFrame()
-        console.log("click", event)
+
+      text.addEventListener("click", (event) => {
+        // console.log("click", event.target.object)
+        event.target.object.color = event.target.object.color === "#fff" ? "#87ceeb" : "#fff"
+        event.target.object.sync()
+        event.target.meta.requestFrame()
       })
+      text.addEventListener("pointerout", (event) => {
+        console.log("pointerout", event.target.object)
+      })
+      // text.addEventListener("pointerdown", (event) => {
+      //   console.log("pointerdown", event.target.object)
+      // })
+      // text.addEventListener("pointerover", (event) => {
+      //   console.log("pointerover", event.target.object)
+      // })
+      text.addEventListener("touchstart", (event) => console.log("touchstart", event))
+
       torus.addEventListener("touchstart", (event) => console.log("touchstart", event))
 
       // let deg = 0.004
@@ -79,10 +95,12 @@
   <body>
     <meta-for>
       <meta-scene>
+        <meta-stats></meta-stats>
         <meta-orbit-controls></meta-orbit-controls>
         <!-- <meta-ambient-light intensity=".04"></meta-ambient-light> -->
         <meta-directional-light intensity="1" position="40, 40, 50" cast-shadow></meta-directional-light>
         <meta-text
+          name="text"
           position.y="0"
           text="META"
           anchor-x="50%"
@@ -92,9 +110,10 @@
           font-size="1.2">
         </meta-text>
         <!-- <meta-gltf-asset url="assets/bots.glb" scale="0.5"></meta-gltf-asset> -->
-        <div id="html"></div>
+        <!-- <div id="html"></div> -->
         <meta-mesh
           id="torus"
+          name="torus"
           position="0,0,0"
           receive-shadow
           onpointerover="console.log('onpointerover')"

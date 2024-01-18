@@ -3,7 +3,7 @@ import { BaseElement } from "./BaseElement.js"
 import { applyPropWithDirective } from "./util/applyProps.js"
 import { attributeValueToArray } from "./util/attributeValueToArray.js"
 
-export class ThreeElement extends BaseElement {
+export class MetaElement extends BaseElement {
   /** Exposed properties from the base element. @type {String[]} */
   static exposedProperties = BaseElement.exposedProperties
   /* Constructor that will instantiate our object. */
@@ -94,18 +94,18 @@ export class ThreeElement extends BaseElement {
     value of the same name in the parent object.
     */
     if (attach) {
-      const parent = this.find((node) => node instanceof ThreeElement)
+      const parent = this.find((node) => node instanceof MetaElement)
       if (!parent) this.error(`Tried to attach to the "${attach} property, but there was no parent!`)
-      else if (parent instanceof ThreeElement) {
+      else if (parent instanceof MetaElement) {
         this.debug("Attaching to:", parent)
         parent.object[attach] = this.object
       } else
         this.error(
-          `Tried to attach to the "${attach} property of ${parent}, but it's not a ThreeElement! It's possible that the target element has not been upgraded to a ThreeElement yet.`
+          `Tried to attach to the "${attach} property of ${parent}, but it's not a MetaElement! It's possible that the target element has not been upgraded to a MetaElement yet.`
         )
     }
   }
-  /** Creates an anonymous class that inherits from ThreeElement, but sets its own Three.js constructor property. */
+  /** Creates an anonymous class that inherits from MetaElement, but sets its own Three.js constructor property. */
   static for(constructor) {
     return class extends this {
       static threeConstructor = constructor

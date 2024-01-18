@@ -1,5 +1,5 @@
 /**
- * Retrieve a Three.js object from a ThreeElement referenced by CSS selector.
+ * Retrieve a Three.js object from a MetaElement referenced by CSS selector.
  * @param {string} selector
  */
 export const getThreeObjectBySelector = (selector) => {
