@@ -17,24 +17,26 @@ const cloneEvent = (originalEvent) => new originalEvent.constructor(originalEven
  * @returns {(originalEvent: Event) => void} Function that takes an event and forwards it to element
  */
 const eventForwarder = (element) => (originalEvent) => element.dispatchEvent(cloneEvent(originalEvent))
+/**
+ * @typedef {THREE.Intersection} Intersection
+ * @typedef {THREE.Renderer} Renderer
+ */
 export class PointerEvents {
-  /** Stores the current (normalized) mouse position. */
   position = new Vector2()
-  /** @type {Event} Last pointermove event */ __pointerMoveEvent
-  /** @type {THREE.Intersection[]} A list of intersections for the last pointer event that performed a raycast. */
-  intersections = []
-  /** @type {THREE.Intersection} The top-most of our current intersections. */
-  intersection
+  /** @type {Intersection[]} last pointer event that performed raycast */ intersections = []
+  /** @type {Event} last event pointermove */ __pointerMoveEvent
+  /** @type {Intersection | undefined} The top-most of our current intersections. */ intersection
   raycaster = new Raycaster()
-  /** @param {MetaScene} sceneElement */
+
+  /** @param {import("./elements/meta-scene.js").MetaScene} sceneElement */
   constructor(sceneElement) {
     this.sceneElement = sceneElement
   }
   start() {
     const scene = this.sceneElement.object
-    const { renderer } = this.sceneElement.meta
-    let /** @type {THREE.Intersection[]} */ previousIntersections
-    let /** @type {THREE.Intersection | undefined} */ previousIntersection
+    const /** @type {{renderer: Renderer}} */ { renderer } = this.sceneElement.meta
+    let /** @type {Intersection[]} */ previousIntersections
+    let /** @type {Intersection | undefined} */ previousIntersection
     /* On every tick, raycast the current pointer position against the scene */
     this.sceneElement.meta.emitter.on("tick", () => {
       /* If we haven't previously received a pointermove event, bail now. */
@@ -99,7 +101,7 @@ export class PointerEvents {
     let object
     for (object = intersection.object; object; object = object.parent) {
       if (object.userData.threeElement) {
-        /** @type {ThreeElement<any>} Find the element representing the hovered scene object */
+        /** @type {ThreeElement} Find the element representing the hovered scene object */
         const element = object.userData.threeElement
         eventForwarder(element)(event)
         return

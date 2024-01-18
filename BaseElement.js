@@ -3,7 +3,10 @@ import { TickerCallbacks } from "./TickerCallbacks.js"
 import { applyPropWithDirective } from "./util/applyProps.js"
 import { camelize } from "./util/camelize.js"
 
-/** @typedef {import("./TickerCallbacks.js").TickerFunction | string | undefined} Ticker */
+/**
+ * @typedef {import("./TickerCallbacks.js").TickerFunction | string | undefined} Ticker
+ * @typedef {import("./elements/meta-scene.js").MetaScene} MetaScene
+ */
 /**
  * The `BaseElement` class extends the built-in HTMLElement class with a bit of convenience
  * functionality, first and foremost in the addition of the `mountedCallback` and `removedCallback` hooks.
@@ -19,40 +22,29 @@ export class BaseElement extends HTMLElement {
    */
   static exposedProperties = ["tick", "lateTick", "frameTick", "renderTick"]
   isMounted = false
-  /**
-   * Returns the instance of Metafor that this element is nested under.
-   * @type {import("./elements/meta-for.js").Metafor}
-   */
+
+  /** @type {MetaFor} */ _meta
+  /** @type {MetaFor} Returns the instance of Metafor that this element is nested under.*/
   get meta() {
-    if (!this._meta) this._meta = this.findGame()
+    if (!this._meta) {
+      if (!this.isConnected) throw "Something is accessing my .meta property while I'm not connected."
+      const meta = this.find((node) => node instanceof MetaFor)
+      if (!meta)
+        throw "No <meta-for> tag found! If you're seeing this error, it might be a sign that you're importing multiple versions of three-elements."
+      this._meta = meta
+    }
     return this._meta
   }
-  /** @type {import("./elements/meta-for.js").MetaFor} */
-  _meta
-  findGame() {
-    if (!this.isConnected)
-      throw "Something is accessing my .meta property while I'm not connected. This shouldn't happen! 😭"
-    const /** @type {import("./elements/meta-for.js").MetaFor}  */ meta = this.find((node) => node instanceof MetaFor)
-    if (!meta)
-      throw "No <meta-for> tag found! If you're seeing this error, it might be a sign that you're importing multiple versions of three-elements."
-    return meta
-  }
-  /**
-   * Returns the instance of MetaScene that this element is nested under.
-   * @type {import("./elements/meta-scene.js").MetaScene}
-   */
+  /** @type {MetaScene} */ _scene
+  /** @type {MetaScene} Returns the instance of MetaScene that this element is nested under. */
   get scene() {
-    if (!this._scene) this._scene = this.findScene()
+    if (!this._scene) {
+      if (!this.isConnected) throw "Something is accessing my .scene property while I'm not connected."
+      const scene = this.find((node) => node.object?.isScene)
+      if (!scene) throw "No <meta-scene> tag found!"
+      this._scene = scene
+    }
     return this._scene
-  }
-  /** @type {import("./elements/meta-scene.js").MetaScene} */
-  _scene
-  findScene() {
-    if (!this.isConnected)
-      throw "Something is accessing my .scene property while I'm not connected. This shouldn't happen! 😭"
-    const /** @type {import("./elements/meta-scene.js").MetaScene} */ scene = this.find((node) => node.object?.isScene)
-    if (!scene) throw "No <meta-scene> tag found!"
-    return scene
   }
   /*** TICKER CALLBACKS ***/
   callbacks = new TickerCallbacks(this)
@@ -199,8 +191,7 @@ export class BaseElement extends HTMLElement {
   find(fn) {
     /* TODO: We might be able to replace this entire function with something like this.closest(). */
     /* Start here */
-    let node
-    node = this
+    let node = this
     do {
       /* Get the immediate parent, or, if we're inside a shadow DOM, the host element */
       node = node.parentElement || node.getRootNode().host
@@ -224,7 +215,7 @@ export class BaseElement extends HTMLElement {
     return `<${this.tagName.toLowerCase()}>`
   }
   debug(...output) {
-    // console.debug(`${this.htmlTagName}`, ...output)
+    console.debug(`${this.htmlTagName}`, ...output)
   }
   error(...output) {
     console.error(`${this.htmlTagName}>`, ...output)

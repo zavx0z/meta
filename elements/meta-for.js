@@ -21,7 +21,6 @@ export class MetaFor extends HTMLElement {
         const element = mutation.target
         const name = mutation.attributeName
         const newValue = element.getAttribute(name)
-
         if (newValue) element.attributeChangedCallback(name, null, newValue)
       }
     })
@@ -31,10 +30,8 @@ export class MetaFor extends HTMLElement {
     return this._observed
   }
   set observed(v) {
-    /* Store value */
-    this._observed = v
-    /* React to the new value in a hopefully idempotent fashion */
-    this.observer.disconnect()
+    this._observed = v /* Store value */
+    this.observer.disconnect() /* React to the new value in a hopefully idempotent fashion */
     if (this._observed) {
       console.warn(
         "WARNING: You have enabled the `observed` attribute. This feature is intended for development only and should not be enabled in production projects, as it has a significant impact on performance."
@@ -58,14 +55,12 @@ export class MetaFor extends HTMLElement {
   }
   _renderer = this.makeDefaultRenderer()
   /* OPTIMIZED RENDERING */
-  /** Has a frame been requested to be rendered in the next tick? */
-  frameRequested = true
+  frameRequested = true /** Has a frame been requested to be rendered in the next tick? */
   get autorender() {
     return this.hasAttribute("autorender")
   }
   set autorender(v) {
-    if (v) this.setAttribute("autorender", "")
-    else this.removeAttribute("autorender")
+    v ? this.setAttribute("autorender", "") : this.removeAttribute("autorender")
   }
   connectedCallback() {
     /* We'll plug our canvas into the shadow root. */
@@ -77,6 +72,8 @@ export class MetaFor extends HTMLElement {
       width: 100%;
       height: 100%;
       display: block;
+      touch-action: none;
+      -webkit-user-select: none;
     }`
     shadow.append(style)
     /* Handle window resizing */
@@ -99,20 +96,14 @@ export class MetaFor extends HTMLElement {
         }
       }
     })
-    /* Announce that we're ready */
-    this.dispatchEvent(new Event("ready"))
-    /* Start ticker */
-    this.startTicking()
+    this.dispatchEvent(new Event("ready")) /* Announce that we're ready */
+    this.startTicking() /* Start ticker */
   }
   disconnectedCallback() {
-    /* Stop observing */
-    this.observer.disconnect()
-    /* Stop ticking */
-    this.stopTicking()
-    /* Unregister event handlers */
-    window.removeEventListener("resize", this.handleWindowResize, false)
-    /* Remove canvas from page */
-    this.cleanupRenderer()
+    this.observer.disconnect() /* Stop observing */
+    this.stopTicking() /* Stop ticking */
+    window.removeEventListener("resize", this.handleWindowResize, false) /* Unregister event handlers */
+    this.cleanupRenderer() /* Remove canvas from page */
   }
   /**
    * @param {string} key
@@ -141,8 +132,6 @@ export class MetaFor extends HTMLElement {
       depth: true,
     })
     renderer.autoClear = false
-    /* Configure color space */
-    // renderer.outputEncoding = THREE.sRGBEncoding
     /* Enable shadow map */
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
@@ -194,9 +183,8 @@ export class MetaFor extends HTMLElement {
     we'll perform normal rAF-style ticking.
     */
     this._ticking = true
-    if (this.renderer instanceof THREE.WebGLRenderer) {
-      this.renderer.setAnimationLoop(tick)
-    } else {
+    if (this.renderer instanceof THREE.WebGLRenderer) this.renderer.setAnimationLoop(tick)
+    else {
       const loop = () => {
         tick()
         if (this._ticking) requestAnimationFrame(loop)
@@ -211,4 +199,4 @@ export class MetaFor extends HTMLElement {
     }
   }
 }
-registerThreeElement("meta-for", "Game", MetaFor)
+registerThreeElement("meta-for", "MetaFor", MetaFor)

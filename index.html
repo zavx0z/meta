@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
     <meta name="description" content="2d/3d vanilla three.js framework" />
     <title>meta</title>
+
     <script type="importmap">
       {
         "imports": {
@@ -18,6 +19,17 @@
         }
       }
     </script>
+    <script type="module">
+      await new Promise((res) =>
+        import("https://zavx0z.github.io/dev-tools/index.js")
+          .then(() => setTimeout(res, 444))
+          .catch((err) => {
+            console.log(err)
+            res({ error: err })
+          })
+      )
+    </script>
+    <dev-tools mobile></dev-tools>
     <style>
       html,
       body {
@@ -26,9 +38,6 @@
         width: 100dvw;
         height: 100dvh;
         background-color: #1b2634;
-      }
-      canvas {
-        touch-action: none;
       }
     </style>
     <script type="module" src="elements/meta-for.js"></script>
@@ -40,12 +49,18 @@
       import { defineThreeElements } from "./util/defineThreeElements.js"
       defineThreeElements()
       const scene = document.body.querySelector("meta-scene")
-      const cube = document.querySelector("#torus").object
+      const torus = document.querySelector("#torus")
+      const torus3D = torus.object
+
+      torus.addEventListener("pointerover", (event) => console.log("pointerover", event))
+      torus.addEventListener("click", (event) => console.log("click", event))
+      torus.addEventListener("touchstart", (event) => console.log("touchstart", event))
+
       let deg = 0.004
       function animate() {
         requestAnimationFrame(animate)
-        cube.rotation.x += deg
-        cube.rotation.y += deg
+        torus3D.rotation.x += deg
+        torus3D.rotation.y += deg
         scene.meta.renderer.render(scene.object, scene.camera)
       }
       animate()
@@ -69,7 +84,13 @@
           font-size="1.2">
         </meta-text>
         <!-- <meta-gltf-asset url="assets/bots.glb" scale="0.5"></meta-gltf-asset> -->
-        <meta-mesh id="torus" position="0,0,0" receive-shadow>
+        <meta-mesh
+          id="torus"
+          position="0,0,0"
+          receive-shadow
+          onpointerover="console.log('onpointerover')"
+          onpointerout="console.log('onpointerout')"
+          onpointerdown="console.log('onpointerdown')">
           <meta-torus-geometry args="4, 2, 14, 44"></meta-torus-geometry>
           <meta-mesh-standard-material wireframe color="#87ceeb"></meta-mesh-standard-material>
         </meta-mesh>

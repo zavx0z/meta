@@ -16,9 +16,9 @@ export const registeredThreeElements = {}
  * Registers an element and adds it to the dictionary that's mapping THREE.* namespace properties (and more) to tag names.
  * @param {string} tagName
  * @param {string} threeName
- * @param {Function} klass
+ * @param {Function} elementClass
  */
-export const registerThreeElement = (tagName, threeName, klass) => {
-  registerElement(tagName, klass)
+export const registerThreeElement = (tagName, threeName, elementClass) => {
+  registerElement(tagName, elementClass)
   registeredThreeElements[threeName] = tagName
 }

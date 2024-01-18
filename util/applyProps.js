@@ -54,7 +54,7 @@ export const applyProp = (object, name, value) => {
   if (object instanceof BaseElement && !object.constructor.exposedProperties.includes(key)) return false
   /* Recursively handle nested keys, eg. position.x */
   if (key in object && rest.length > 0) return applyProp(object[key], rest.join("."), value)
-/*
+  /*
   Handle boolean properties. We will check against the only values that we consider false here,
   taking into account that they might be coming from string-based HTML element attributes, where a
   stand-alone boolean attribute like "cast-shadow" will emit a value of "".
