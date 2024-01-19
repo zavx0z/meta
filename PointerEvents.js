@@ -79,10 +79,11 @@ export class PointerEvents {
     for (const type of ["pointerdown", "pointerup", "click", "dblclick"]) {
       renderer.domElement.addEventListener(type, (e) => {
         const { camera } = this.sceneElement
+        normalizePointerPosition(renderer, e.x, e.y, this.position)
         this.raycaster.setFromCamera(this.position, camera)
         const intersections = this.raycaster.intersectObjects(scene.children, true)
         if (intersections) {
-          console.log(intersections.map(i => i.object.name))
+          // console.log(intersections.map((i) => i.object.name))
           const intersection = intersections[0]
           if (intersection && intersection.object !== undefined)
             this.dispatchEventToIntersection(cloneEvent(e), intersections[0])
